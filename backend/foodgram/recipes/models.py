@@ -32,6 +32,8 @@ class IngredientForRecipe(models.Model):
     )
 
     class Meta:
+        constraints = [models.UniqueConstraint(
+            fields=['recipe', 'ingredient'], name='unique_ingredient')]
         verbose_name = 'ингредиент для рецепта'
         verbose_name_plural = 'ингредиенты для рецептов'
 
@@ -61,13 +63,15 @@ class Recipe(models.Model):
         User, related_name='recipes', verbose_name='автор',
         on_delete=models.CASCADE
     )
-    is_favorited = models.BooleanField(
-        verbose_name='в вашем избранном',
-        default=False
+    favorited_by = models.ManyToManyField(
+        User, related_name='favorite_recipes',
+        verbose_name='в избранном у',
+        blank=True
     )
-    is_in_shopping_cart = models.BooleanField(
-        verbose_name='в вашем списке покупок',
-        default=False
+    in_shopping_cart_of = models.ManyToManyField(
+        User, related_name='shopping_cart',
+        verbose_name='в списке покупок у',
+        blank=True
     )
 
     class Meta:

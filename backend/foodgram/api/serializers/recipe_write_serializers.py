@@ -7,7 +7,6 @@ from tags.models import Tag
 from .user_serializers import CustomUserSerializer
 
 
-# сериализатор для поля ингредиента внутри Recipe: запись
 class IngredientForRecipeSerializerWrite(serializers.ModelSerializer):
     id = serializers.IntegerField()
     amount = serializers.IntegerField()
@@ -36,7 +35,6 @@ class TagsRepresentationField(serializers.PrimaryKeyRelatedField):
         }
 
 
-# сериализатор для Recipe: запись
 class RecipeSerializerWrite(serializers.ModelSerializer):
     tags = TagsRepresentationField(
         queryset=Tag.objects.all(), many=True
@@ -89,18 +87,20 @@ class RecipeSerializerWrite(serializers.ModelSerializer):
                     recipe=instance, ingredient=checked_ingredient
                 ).exists()
 
-                if new_ingredient_exists is False:
+                if not new_ingredient_exists:
                     IngredientForRecipe.objects.create(
                         recipe=instance, ingredient=checked_ingredient,
                         amount=ingredient['amount']
                     )
                 else:
-                    existing_ingredient = IngredientForRecipe.objects.get(
-                        recipe=instance, ingredient=checked_ingredient
+                    existing_ingredient = get_object_or_404(
+                        IngredientForRecipe, recipe=instance,
+                        ingredient=checked_ingredient
                     )
                     if existing_ingredient.amount == ingredient['amount']:
-                        IngredientForRecipe.objects.get(
-                            recipe=instance, ingredient=checked_ingredient,
+                        get_object_or_404(
+                            IngredientForRecipe, recipe=instance,
+                            ingredient=checked_ingredient,
                             amount=ingredient['amount']
                         )
 
@@ -123,13 +123,4 @@ class RecipeSerializerWrite(serializers.ModelSerializer):
 
             instance.tags.set(new_tags)
 
-        instance.name = validated_data.get('name', instance.name)
-        instance.image = validated_data.get('image', instance.image)
-        instance.text = validated_data.get('text', instance.text)
-        instance.cooking_time = validated_data.get(
-            'cooking_time', instance.cooking_time
-        )
-
-        instance.save()
-
-        return instance
+        return super().update(instance, validated_data)

@@ -29,26 +29,18 @@ class RecipeViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
 
-    @action(detail=True,
-            methods=['post', 'delete'],
-            queryset=Recipe.objects.all(),
-            permission_classes=(permissions.IsAuthenticated,))
-    # формируемый url для вызова этой функции: recipes/<id>/favorite/
-    def favorite(self, request, *args, **kwargs):
-        recipe_id = self.kwargs['pk']
-        recipe = get_object_or_404(Recipe, id=recipe_id)
-
+    def adding_recipes(self, request, recipe, users, *args, **kwargs):
         if request.method == 'POST':
-            if recipe.is_favorited is False:
-                recipe.is_favorited = True
+            if request.user not in users.all():
+                users.add(request.user)
             else:
                 return Response(
                     {'detail': 'Этот рецепт уже есть в вашем избранном.'},
                     status=status.HTTP_400_BAD_REQUEST
                 )
         if request.method == 'DELETE':
-            if recipe.is_favorited is True:
-                recipe.is_favorited = False
+            if request.user in users.all():
+                users.remove(request.user)
             else:
                 return Response(
                     {'detail': 'Этого рецепта нет в вашем избранном.'},
@@ -78,55 +70,41 @@ class RecipeViewSet(viewsets.ModelViewSet):
             methods=['post', 'delete'],
             queryset=Recipe.objects.all(),
             permission_classes=(permissions.IsAuthenticated,))
-    # формируемый url для вызова этой функции: recipes/<id>/shopping_cart/
-    def shopping_cart(self, request, *args, **kwargs):
-
+    def favorite(self, request, *args, **kwargs):
+        """
+        Adds a recipe to/deletes a recipe from a current user's favorites.
+        Requests are to be sent to /recipes/<id>/favorite/.
+        """
         recipe_id = self.kwargs['pk']
         recipe = get_object_or_404(Recipe, id=recipe_id)
+        users = recipe.favorited_by
+        return self.adding_recipes(request, recipe, users)
 
-        if request.method == 'POST':
-            if recipe.is_in_shopping_cart is False:
-                recipe.is_in_shopping_cart = True
-            else:
-                return Response(
-                    {'detail': 'Этот рецепт уже есть в вашем списке покупок'},
-                    status=status.HTTP_400_BAD_REQUEST
-                )
-        if request.method == 'DELETE':
-            if recipe.is_in_shopping_cart is True:
-                recipe.is_in_shopping_cart = False
-            else:
-                return Response(
-                    {'detail': 'Этого рецепта нет в вашем списке покупок.'},
-                    status=status.HTTP_400_BAD_REQUEST
-                )
-        if request.method not in ['POST', 'DELETE']:
-            return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
-
-        serializer = RecipeSerializerLite(
-            recipe, data=request.data, partial=True
-        )
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-
-        if request.method == 'POST':
-            headers = self.get_success_headers(serializer.data)
-            return Response(
-                serializer.data, status=status.HTTP_201_CREATED,
-                headers=headers
-            )
-        if request.method == 'DELETE':
-            return Response(status=status.HTTP_204_NO_CONTENT)
-        else:
-            return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
+    @action(detail=True,
+            methods=['post', 'delete'],
+            queryset=Recipe.objects.all(),
+            permission_classes=(permissions.IsAuthenticated,))
+    def shopping_cart(self, request, *args, **kwargs):
+        """
+        Adds a recipe to/deletes a recipe from a current user's shopping_cart.
+        Requests are to be sent to /recipes/<id>/shopping_cart/.
+        """
+        recipe_id = self.kwargs['pk']
+        recipe = get_object_or_404(Recipe, id=recipe_id)
+        users = recipe.in_shopping_cart_of
+        return self.adding_recipes(request, recipe, users)
 
     @action(detail=False,
             methods=['get'],
             permission_classes=(permissions.IsAuthenticated,))
-    # формируемый url для вызова этой функции: recipes/download_shopping_cart/
     def download_shopping_cart(self, request):
+        """
+        Allows donloading the list of all ingredients from all recipes
+        added to a current user's shopping_cart.
+        Requests are to be sent to /recipes/download_shopping_cart/.
+        """
         ingredients_in_my_cart = IngredientForRecipe.objects.filter(
-            recipe__is_in_shopping_cart=True).values(
+            recipe__in_shopping_cart_of__id=request.user.id).values(
                 'ingredient__name', 'ingredient__measurement_unit').annotate(
                     total_amount=Sum('amount'))
         if not ingredients_in_my_cart:
