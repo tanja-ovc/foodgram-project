@@ -31,7 +31,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
 
     def adding_recipes(self, request, recipe, users, *args, **kwargs):
         if request.method == 'POST':
-            if request.user not in users.all():
+            if not users.filter(id=request.user.id).exists():
                 users.add(request.user)
             else:
                 return Response(
@@ -39,7 +39,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
                     status=status.HTTP_400_BAD_REQUEST
                 )
         if request.method == 'DELETE':
-            if request.user in users.all():
+            if users.filter(id=request.user.id).exists():
                 users.remove(request.user)
             else:
                 return Response(

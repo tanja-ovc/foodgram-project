@@ -34,14 +34,8 @@ class RecipeSerializerRead(serializers.ModelSerializer):
 
     def get_is_favorited(self, obj) -> bool:
         current_user = self.context['request'].user
-        if current_user in obj.favorited_by.all():
-            return True
-        else:
-            return False
+        return obj.favorited_by.filter(id=current_user.id).exists()
 
     def get_is_in_shopping_cart(self, obj) -> bool:
         current_user = self.context['request'].user
-        if current_user in obj.in_shopping_cart_of.all():
-            return True
-        else:
-            return False
+        return obj.in_shopping_cart_of.filter(id=current_user.id).exists()

@@ -19,8 +19,11 @@ class PaginatedUserViewSet(UserViewSet):
             methods=['get'],
             serializer_class=UserSerializerForSubscriptions,
             permission_classes=(permissions.IsAuthenticated,))
-    # формируемый url для вызова этой функции: users/subscriptions/
     def subscriptions(self, request, *args, **kwargs):
+        """
+        Lists the subscriptions of a current user.
+        Requests are to be sent at /users/subscriptions/.
+        """
         def get_queryset(self):
             return User.objects.filter(
                  subscriptions_to_the_user=self.request.user
@@ -42,8 +45,11 @@ class PaginatedUserViewSet(UserViewSet):
             queryset=User.objects.all(),
             serializer_class=UserSerializerForSubscriptions,
             permission_classes=(permissions.IsAuthenticated,))
-    # формируемый url для вызова этой функции: users/<id>/subscribe/
     def subscribe(self, request, *args, **kwargs):
+        """
+        Subscribes/unsubscribes a user to/from another user.
+        Requests are to be sent at /users/<id>/subscribe/.
+        """
         user_id = self.kwargs['id']
         user = get_object_or_404(User, id=user_id)
 
