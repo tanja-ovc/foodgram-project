@@ -26,10 +26,10 @@ class PaginatedUserViewSet(UserViewSet):
         """
         def get_queryset(self):
             return User.objects.filter(
-                 subscriptions_to_the_user=self.request.user
-                 ).annotate(
-                    recipes_count=Count('recipes')
-                )
+                subscriptions_to_the_user=self.request.user
+            ).annotate(
+                recipes_count=Count('recipes')
+            )
         queryset = get_queryset(self)
 
         page = self.paginate_queryset(queryset)

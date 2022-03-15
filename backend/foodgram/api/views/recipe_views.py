@@ -109,8 +109,8 @@ class RecipeViewSet(viewsets.ModelViewSet):
                     total_amount=Sum('amount'))
         if not ingredients_in_my_cart:
             return Response(
-                    {'detail': 'В вашем списке покупок пока нет рецептов.'},
-                    status=status.HTTP_400_BAD_REQUEST)
+                {'detail': 'В вашем списке покупок пока нет рецептов.'},
+                status=status.HTTP_400_BAD_REQUEST)
         ingredients_list = []
         for ingredient_obj in ingredients_in_my_cart:
             name = ingredient_obj['ingredient__name']
