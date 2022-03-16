@@ -32,9 +32,12 @@ API для платформы Foodgram.
   USER - ваш юзернейм для подключения к удалённому серверу
 
   SSH_KEY - private key компьютера, имеющего доступ по SSH к удалённому серверу (это нужно для того, чтобы ваш удалённый сервер опознал сервер GitHub Actions как тот, который имеет право на подключение).
+
   Обратите внимание, что private key нужно скопировать в секреты репозитория *вместе со следующим текстом*:
+  ```
   -----BEGIN OPENSSH PRIVATE KEY-----
   -----END OPENSSH PRIVATE KEY-----
+  ```
 
   В случае, если ваш SSH-key создан с прилагающимся паролем, создайте также переменную PASSPHRASE, которая и будет содержать пароль, а в код файла _yamdb\_workflow.yml_ в ```deploy``` добавьте ```passphrase: ${{ secrets.PASSPHRASE }}``` таким образом:
           
@@ -54,9 +57,12 @@ API для платформы Foodgram.
   ```
 
   Значения для переменных окружения SECRET_KEY, DEBUG, ALLOWED_HOSTS, DB_ENGINE, DB_NAME, POSTGRES_USER, POSTGRES_PASSWORD, DB_HOST, DB_PORT возьмите из файла _infra/.env_ (ДОРАБОТАТЬ)
+
   Важно! Значение переменной SECRET_KEY в секретах репозитория *возьмите в кавычки*.
+
   Переменной ALLOWED_HOSTS в секретах репозитория присвойте такое значение:
   _<адрес_вашего_сервера>,backend_
+  
   (backend - название контейнера с кодом бэкенда)
 
   TELEGRAM_TO - ваш ID в Telegram (узнать можно с помощью бота Userinfobot в Telegram: https://github.com/nadam/userinfobot)
