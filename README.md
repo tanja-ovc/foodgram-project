@@ -68,7 +68,16 @@ Foodgram - платформа для обмена рецептами.
           script: ...
   ```
 
-  Значения для переменных окружения SECRET_KEY, DEBUG, ALLOWED_HOSTS, DB_ENGINE, DB_NAME, POSTGRES_USER, POSTGRES_PASSWORD, DB_HOST, DB_PORT возьмите из файла _infra/.env_
+  Значения для переменных окружения 
+  SECRET_KEY, 
+  DEBUG, 
+  ALLOWED_HOSTS, 
+  DB_ENGINE, 
+  DB_NAME, 
+  POSTGRES_USER, 
+  POSTGRES_PASSWORD, 
+  DB_HOST, 
+  DB_PORT возьмите из файла _infra/.env_
   
   (ДОРАБОТАТЬ)
 
