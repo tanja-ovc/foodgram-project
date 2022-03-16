@@ -1,16 +1,16 @@
-# API для Foodgram (+ инфраструктура)
+# Foodgram
 
 [![Foodgram workflow](https://github.com/tanja-ovc/foodgram-project-react/actions/workflows/foodgram_workflow.yml/badge.svg)](https://github.com/tanja-ovc/foodgram-project-react/actions/workflows/foodgram_workflow.yml)
 
-### Foodgram
-
-Foodgram - платформа для обмена рецептами.
+**Foodgram** - платформа для обмена рецептами.
 
 Здесь пользователи смогут 
 - публиковать рецепты,
 - подписываться на публикации других пользователей,
 - добавлять понравившиеся рецепты в список «Избранное»,
 - перед походом в магазин скачивать сводный список продуктов, необходимых для приготовления одного или нескольких выбранных блюд.
+
+### Этот проект содержит код фронтенда, бэкенда, инфраструктуры для разворачивания на удалённом сервере
 
 ### Frontend
 
@@ -20,7 +20,7 @@ Foodgram - платформа для обмена рецептами.
 
 Проект на данный момент развёрнут на сервере 51.250.12.20.
 
-Документация API доступна по адресу http://51.250.12.20/api/docs/redoc/.
+Документация API доступна по адресу http://51.250.12.20/api/docs/.
 
 ### Инфраструктура
 
@@ -31,7 +31,7 @@ Foodgram - платформа для обмена рецептами.
 
  - Установите Docker (```sudo apt install docker.io``` для Linux) и docker-compose (https://docs.docker.com/compose/install/).
 
-- Скопируйте файлы _docker-compose.yaml_ и _nginx/default.conf_ из данного проекта на ваш сервер в _home/<ваш_username>/docker-compose.yaml_ и _home/<ваш_username>/nginx/default.conf_ соответственно.
+- Скопируйте файлы _docker-compose.yaml_ и _nginx.conf_ из данного проекта (они находятся в директории _infra/_) на ваш сервер в _home/<ваш_username>/docker-compose.yaml_ и _home/<ваш_username>/nginx.conf_ соответственно.
 
 - Добавьте в Secrets GitHub Actions вашего репозитория переменные окружения для работы базы данных:
 
@@ -45,7 +45,7 @@ Foodgram - платформа для обмена рецептами.
 
   SSH_KEY - private key компьютера, имеющего доступ по SSH к удалённому серверу (это нужно для того, чтобы ваш удалённый сервер опознал сервер GitHub Actions как тот, который имеет право на подключение).
 
-  Обратите внимание, что private key нужно скопировать в секреты репозитория *вместе со следующим текстом*:
+  Обратите внимание, что private key нужно скопировать в секреты репозитория **вместе со следующим текстом**:
   ```
   -----BEGIN OPENSSH PRIVATE KEY-----
   -----END OPENSSH PRIVATE KEY-----
@@ -68,20 +68,9 @@ Foodgram - платформа для обмена рецептами.
           script: ...
   ```
 
-  Значения для переменных окружения 
-  SECRET_KEY, 
-  DEBUG, 
-  ALLOWED_HOSTS, 
-  DB_ENGINE, 
-  DB_NAME, 
-  POSTGRES_USER, 
-  POSTGRES_PASSWORD, 
-  DB_HOST, 
-  DB_PORT возьмите из файла _infra/.env_
+  Значения для переменных окружения SECRET_KEY, DEBUG, DB_ENGINE, DB_NAME, POSTGRES_USER, POSTGRES_PASSWORD, DB_HOST, DB_PORT возьмите из файла _infra/.env_ (пришлю в личном сообщении).
   
-  (ДОРАБОТАТЬ)
-
-  Важно! Значение переменной SECRET_KEY в секретах репозитория *возьмите в кавычки*.
+  Важно! Значение переменной SECRET_KEY в секретах репозитория **возьмите в кавычки**.
 
   Переменной ALLOWED_HOSTS в секретах репозитория присвойте такое значение:
   _<адрес_вашего_сервера>,backend_
@@ -106,7 +95,7 @@ Workflow будет запускаться при каждом пуше (git pus
 
 ```sudo docker-compose exec backend python manage.py createsuperuser```
 
-Документация проекта будет доступна по адресу http://<IP_вашего_сервера>/api/docs/redoc/
+Документация проекта будет доступна по адресу http://<IP_вашего_сервера>/api/docs/
 
 Админка: http://<IP_вашего_сервера>/admin/
 
