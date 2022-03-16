@@ -10,7 +10,7 @@ services:
   backend:
     image: tanjadocker/foodgram:latest
     restart: always
-    hostname: 51.250.12.20
+    domainname: 51.250.12.20
     volumes:
       - static_backend_value:/app/static_backend/
       - media_value:/app/media/
