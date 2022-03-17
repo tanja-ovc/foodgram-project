@@ -1,6 +1,6 @@
-# Foodgram
-
 [![Foodgram workflow](https://github.com/tanja-ovc/foodgram-project-react/actions/workflows/foodgram_workflow.yml/badge.svg)](https://github.com/tanja-ovc/foodgram-project-react/actions/workflows/foodgram_workflow.yml)
+
+# Foodgram
 
 **Foodgram** - платформа для обмена рецептами.
 
@@ -10,7 +10,7 @@
 - добавлять понравившиеся рецепты в список «Избранное»,
 - перед походом в магазин скачивать сводный список продуктов, необходимых для приготовления одного или нескольких выбранных блюд.
 
-### Этот проект содержит код фронтенда, бэкенда, инфраструктуры для разворачивания на удалённом сервере
+### Этот проект содержит код фронтенда, бэкенда и инфраструктуры для разворачивания на удалённом сервере
 
 ### Frontend
 
@@ -31,9 +31,11 @@
 
  - Установите Docker (```sudo apt install docker.io``` для Linux) и docker-compose (https://docs.docker.com/compose/install/).
 
-- Скопируйте файлы _docker-compose.yaml_ и _nginx.conf_ из данного проекта (они находятся в директории _infra/_) на ваш сервер в _home/<ваш_username>/docker-compose.yaml_ и _home/<ваш_username>/nginx.conf_ соответственно.
+- В файле _infra/nginx.conf_ измените 4-ую строку ```server_name 51.250.12.20```: впишите вместо 51.250.12.20 IP вашего сервера, на котором вы хотите развернуть проект;
 
-- Добавьте в Secrets GitHub Actions вашего репозитория переменные окружения для работы базы данных:
+- Скопируйте файлы _docker-compose.yaml_ и _nginx.conf_ из данного проекта (они находятся в директории _infra/_) на ваш сервер в _home/<ваш_username>/docker-compose.yaml_ и _home/<ваш_username>/nginx/default.conf_ соответственно.
+
+- Добавьте в Secrets GitHub Actions вашего репозитория переменные окружения:
 
   DOCKER_USERNAME - ваш юзернейм на Docker Hub
 
@@ -68,14 +70,9 @@
           script: ...
   ```
 
-  Значения для переменных окружения SECRET_KEY, DEBUG, DB_ENGINE, DB_NAME, POSTGRES_USER, POSTGRES_PASSWORD, DB_HOST, DB_PORT возьмите из файла _infra/.env_ (пришлю в личном сообщении).
+  Значения для переменных окружения SECRET_KEY, DEBUG, ALLOWED_HOSTS, DB_ENGINE, DB_NAME, POSTGRES_USER, POSTGRES_PASSWORD, DB_HOST, DB_PORT возьмите из файла _infra/.env_ (пришлю в личном сообщении).
   
   Важно! Значение переменной SECRET_KEY в секретах репозитория **возьмите в кавычки**.
-
-  Переменной ALLOWED_HOSTS в секретах репозитория присвойте такое значение:
-  _<адрес_вашего_сервера>,backend_
-
-  (backend - название контейнера с кодом бэкенда)
 
   TELEGRAM_TO - ваш ID в Telegram (узнать можно с помощью бота Userinfobot в Telegram: https://github.com/nadam/userinfobot)
 
