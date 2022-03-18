@@ -8,6 +8,7 @@ from rest_framework.response import Response
 
 from recipes.models import IngredientForRecipe, Recipe
 from ..filters import RecipeFilter
+from ..paginators import Custom999PageNumberPagination
 from ..permissions import IsAuthorOrAuthenticatedOrReadOnlyPermission
 from ..serializers import (RecipeSerializerLite, RecipeSerializerRead,
                            RecipeSerializerWrite)
@@ -31,13 +32,11 @@ class RecipeViewSet(viewsets.ModelViewSet):
 
     @property
     def paginator(self):
-        """
-        The paginator instance associated with the view, or `None`.
-        """
         if not hasattr(self, '_paginator'):
-            if (self.pagination_class is None
-                    or self.request.query_params.get('is_in_shopping_cart')):
+            if self.pagination_class is None:
                 self._paginator = None
+            if self.request.query_params.get('is_in_shopping_cart'):
+                self._paginator = Custom999PageNumberPagination
             else:
                 self._paginator = self.pagination_class()
         return self._paginator
