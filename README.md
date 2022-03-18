@@ -96,9 +96,21 @@ Workflow будет запускаться при каждом пуше (git pus
 
 Админка: http://<IP_вашего_сервера>/admin/
 
+Заполнение таблицы ингредиентов в БД прилагающимися данными в формате .csv можно произвести с помощью команды
+
+```sudo docker-compose exec backend python manage.py import_data```
+
+(При разработке локально можно обойтись средствами pqsl, выполнив команду
+```COPY recipes_ingredient(NAME,MEASUREMENT_UNIT) FROM '/Users/tanja_ovc/Dev/foodgram-project-react/backend/foodgram/data/ingredients.csv' WITH (FORMAT csv);```)
 
 
-### Автор
+### Автор кода manage-команды для загрузки данных из .csv файла в БД
+
+_Василий Кузьминых_
+
+(я только изменила команду под текущие нужды)
+
+### Автор всего остального
 
 _Татьяна Овчинникова_
 
