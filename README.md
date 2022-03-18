@@ -100,6 +100,8 @@ Workflow будет запускаться при каждом пуше (git pus
 
 ```sudo docker-compose exec backend python manage.py import_data```
 
+(При разработке локально можно обойтись средствами pqsl, выполнив команду
+```COPY recipes_ingredient(NAME,MEASUREMENT_UNIT) FROM '/Users/tanja_ovc/Dev/foodgram-project-react/backend/foodgram/data/ingredients.csv' WITH (FORMAT csv);```)
 
 
 ### Автор кода manage-команды для загрузки данных из .csv файла в БД

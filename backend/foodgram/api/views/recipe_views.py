@@ -29,6 +29,21 @@ class RecipeViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
 
+    def list(self, request, *args, **kwargs):
+        """
+        Removing pagination for a list of recipes in a shopping cart.
+        """
+        queryset = self.filter_queryset(self.get_queryset())
+
+        if not request.query_params.get('is_in_shopping_cart'):
+            page = self.paginate_queryset(queryset)
+            if page is not None:
+                serializer = self.get_serializer(page, many=True)
+                return self.get_paginated_response(serializer.data)
+
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
+
     def adding_recipes(self, request, recipe, users, *args, **kwargs):
         if request.method == 'POST':
             if not users.filter(id=request.user.id).exists():
@@ -83,7 +98,6 @@ class RecipeViewSet(viewsets.ModelViewSet):
     @action(detail=True,
             methods=['post', 'delete'],
             queryset=Recipe.objects.all(),
-            pagination_class=None,
             permission_classes=(permissions.IsAuthenticated,))
     def shopping_cart(self, request, *args, **kwargs):
         """
