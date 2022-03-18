@@ -35,7 +35,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
         if not hasattr(self, '_paginator'):
             if self.pagination_class is None:
                 self._paginator = None
-            if self.request.query_params.get('is_in_shopping_cart'):
+            if self.request.query_params.get('is_in_shopping_cart') == 1:
                 self._paginator = Custom999PageNumberPagination
             else:
                 self._paginator = self.pagination_class()
