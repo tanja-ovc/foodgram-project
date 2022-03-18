@@ -83,6 +83,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
     @action(detail=True,
             methods=['post', 'delete'],
             queryset=Recipe.objects.all(),
+            pagination_class=None,
             permission_classes=(permissions.IsAuthenticated,))
     def shopping_cart(self, request, *args, **kwargs):
         """

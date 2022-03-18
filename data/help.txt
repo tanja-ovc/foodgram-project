@@ -1,2 +1,0 @@
-команда для заполнения таблицы ингредиентов в БД Postgres:
-COPY recipes_ingredient(NAME,MEASUREMENT_UNIT) FROM '/Users/tanja_ovc/Dev/foodgram-project-react/data/ingredients.csv' WITH (FORMAT csv);
