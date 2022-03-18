@@ -8,7 +8,6 @@ from rest_framework.response import Response
 
 from recipes.models import IngredientForRecipe, Recipe
 from ..filters import RecipeFilter
-from ..paginators import Custom999PageNumberPagination
 from ..permissions import IsAuthorOrAuthenticatedOrReadOnlyPermission
 from ..serializers import (RecipeSerializerLite, RecipeSerializerRead,
                            RecipeSerializerWrite)
@@ -16,6 +15,7 @@ from ..serializers import (RecipeSerializerLite, RecipeSerializerRead,
 
 class RecipeViewSet(viewsets.ModelViewSet):
     queryset = Recipe.objects.all()
+    pagination_class = PageNumberPagination
     filter_backends = (DjangoFilterBackend, filters.OrderingFilter,)
     permission_classes = (IsAuthorOrAuthenticatedOrReadOnlyPermission,)
     filterset_class = RecipeFilter
@@ -28,11 +28,6 @@ class RecipeViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
-
-    def get_pagination_class(self):
-        if self.request.query_params.get('is_in_shopping_cart') == 1:
-            return Custom999PageNumberPagination
-        return PageNumberPagination
 
     def adding_recipes(self, request, recipe, users, *args, **kwargs):
         if request.method == 'POST':
