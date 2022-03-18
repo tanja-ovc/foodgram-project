@@ -8,6 +8,7 @@ from rest_framework.response import Response
 
 from recipes.models import IngredientForRecipe, Recipe
 from ..filters import RecipeFilter
+from ..paginators import Custom999PageNumberPagination
 from ..permissions import IsAuthorOrAuthenticatedOrReadOnlyPermission
 from ..serializers import (RecipeSerializerLite, RecipeSerializerRead,
                            RecipeSerializerWrite)
@@ -15,7 +16,6 @@ from ..serializers import (RecipeSerializerLite, RecipeSerializerRead,
 
 class RecipeViewSet(viewsets.ModelViewSet):
     queryset = Recipe.objects.all()
-    pagination_class = PageNumberPagination
     filter_backends = (DjangoFilterBackend, filters.OrderingFilter,)
     permission_classes = (IsAuthorOrAuthenticatedOrReadOnlyPermission,)
     filterset_class = RecipeFilter
@@ -23,11 +23,16 @@ class RecipeViewSet(viewsets.ModelViewSet):
 
     def get_serializer_class(self):
         if self.request.method in permissions.SAFE_METHODS:
-            return RecipeSerializerRead
-        return RecipeSerializerWrite
+            return Custom999PageNumberPagination
+        return PageNumberPagination
 
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
+
+    def get_pagination_class(self):
+        if self.request.query_params.get('is_in_shopping_cart') == 1:
+            return RecipeSerializerRead
+        return RecipeSerializerWrite
 
     def adding_recipes(self, request, recipe, users, *args, **kwargs):
         if request.method == 'POST':
@@ -99,7 +104,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
             permission_classes=(permissions.IsAuthenticated,))
     def download_shopping_cart(self, request):
         """
-        Allows donloading the list of all ingredients from all recipes
+        Allows downloading the list of all ingredients from all recipes
         added to a current user's shopping_cart.
         Requests are to be sent to /recipes/download_shopping_cart/.
         """
