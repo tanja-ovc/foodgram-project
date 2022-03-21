@@ -89,18 +89,33 @@ class RecipeSerializerWrite(serializers.ModelSerializer):
                 checked_ingredient = get_object_or_404(
                     Ingredient, id=ingredient['id']
                 )
+
                 new_ingredient_exists = IngredientForRecipe.objects.filter(
                     recipe=instance, ingredient=checked_ingredient
                 ).exists()
 
-                if new_ingredient_exists:
-                    raise serializers.ValidationError(
-                        'Вы добавили один ингредиент несколько раз.'
+                if not new_ingredient_exists:
+                    IngredientForRecipe.objects.create(
+                        recipe=instance, ingredient=checked_ingredient,
+                        amount=ingredient['amount']
                     )
-                IngredientForRecipe.objects.create(
-                    recipe=instance, ingredient=checked_ingredient,
-                    amount=ingredient['amount']
-                )
+                else:
+                    existing_ingredient = get_object_or_404(
+                        IngredientForRecipe, recipe=instance,
+                        ingredient=checked_ingredient
+                    )
+                    if existing_ingredient.amount == ingredient['amount']:
+                        get_object_or_404(
+                            IngredientForRecipe, recipe=instance,
+                            ingredient=checked_ingredient,
+                            amount=ingredient['amount']
+                        )
+
+                    if existing_ingredient.amount != ingredient['amount']:
+                        IngredientForRecipe.objects.filter(
+                            recipe=instance, ingredient=checked_ingredient
+                        ).update(amount=ingredient['amount'])
+
                 new_ingredients.append(checked_ingredient)
 
             instance.ingredients.set(new_ingredients)
