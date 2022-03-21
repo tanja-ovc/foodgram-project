@@ -64,6 +64,12 @@ class RecipeSerializerWrite(serializers.ModelSerializer):
             checked_ingredient = get_object_or_404(
                 Ingredient, id=ingredient['id']
             )
+            if IngredientForRecipe.objects.filter(
+                recipe=recipe, ingredient=checked_ingredient
+            ).exists():
+                raise serializers.ValidationError(
+                    'Вы уже добавили такой ингредиент в этот рецепт.'
+                )
             IngredientForRecipe.objects.create(
                 recipe=recipe, ingredient=checked_ingredient,
                 amount=ingredient['amount']
