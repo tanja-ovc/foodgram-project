@@ -15,6 +15,13 @@ class IngredientForRecipeSerializerWrite(serializers.ModelSerializer):
         model = IngredientForRecipe
         fields = ('id', 'amount')
 
+    def validate_amount(self, value):
+        if value <= 0:
+            raise serializers.ValidationError(
+                'Количество ингредиента в его единицах измерения '
+                'должно быть больше либо равно 1.'
+            )
+
     def to_representation(self, value):
         return {
             "id": value.ingredient.id,
