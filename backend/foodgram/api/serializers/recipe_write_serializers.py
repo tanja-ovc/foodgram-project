@@ -21,6 +21,7 @@ class IngredientForRecipeSerializerWrite(serializers.ModelSerializer):
                 'Количество ингредиента в его единицах измерения '
                 'должно быть больше либо равно 1.'
             )
+        return value
 
     def to_representation(self, value):
         return {
