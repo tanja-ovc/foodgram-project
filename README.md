@@ -1,6 +1,7 @@
 [![Foodgram workflow](https://github.com/tanja-ovc/foodgram-project-react/actions/workflows/foodgram_workflow.yml/badge.svg)](https://github.com/tanja-ovc/foodgram-project-react/actions/workflows/foodgram_workflow.yml)
 
 # Foodgram
+## Проект 14-го спринта "Продуктовый помощник" 
 
 **Foodgram** - платформа для обмена рецептами.
 
