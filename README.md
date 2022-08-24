@@ -1,7 +1,8 @@
-[![Foodgram workflow](https://github.com/tanja-ovc/foodgram-project-react/actions/workflows/foodgram_workflow.yml/badge.svg)](https://github.com/tanja-ovc/foodgram-project-react/actions/workflows/foodgram_workflow.yml)
-
 # Foodgram
-## Проект "Продуктовый помощник" 
+
+## Проект "Продуктовый помощник"
+
+[![Foodgram workflow](https://github.com/tanja-ovc/foodgram-project-react/actions/workflows/foodgram_workflow.yml/badge.svg)](https://github.com/tanja-ovc/foodgram-project-react/actions/workflows/foodgram_workflow.yml)
 
 **Foodgram** - платформа для обмена рецептами.
 
@@ -11,21 +12,25 @@
 - добавлять понравившиеся рецепты в список «Избранное»,
 - перед походом в магазин скачивать сводный список продуктов, необходимых для приготовления одного или нескольких выбранных блюд.
 
-Этот проект содержит код фронтенда, бэкенда и инфраструктуры для локальной разработки в Docker-контейнерах. Развёрнут проект на удалённом сервере в Docker-контейнерах.
+Этот проект содержит код фронтенда, бэкенда и инфраструктуры для локальной разработки в Docker-контейнерах.Авторство кода фронтенда принадлежит Яндекс.Практикуму.
 
-### Frontend
+Проект также ранее размещался на удалённом сервере на Яндекс.Облаке.
 
-Проект содержит готовый код фронтенда (авторства Яндекс.Практикума), который взаимодействует с кодом бэкэнда через API.
+_Примечание:_ на данный момент удалённый сервер, где я размещала проект, не работает в связи с истечением гранта на использование виртуальной машины на Яндекс.Облаке.
 
-### API
+### Технологии
 
-Проект на данный момент развёрнут по адресу http://foodgrammers.bounceme.net/.
-
-Документация API доступна по адресу http://foodgrammers.bounceme.net/api/docs/.
+Python3.7, Django REST Framework, Docker, nginx, Gunicorn
 
 ### Инфраструктура
 
 Проект содержит в себе всё необходимое для для локальной разработки в Docker-контейнерах.
+
+Принцип разворачивания проекта с помощью Docker-контейнеров описан мной в README предыдущих проектов здесь:
+
+- локальный деплой: https://github.com/tanja-ovc/docker_local_containers#docker-yamdb-local
+
+- деплой на удалённом сервере: https://github.com/tanja-ovc/docker_remote_containers#docker-yamdb-remote
 
 ### Заполнение БД ингредиентами
 
@@ -37,12 +42,10 @@
 ```COPY recipes_ingredient(NAME,MEASUREMENT_UNIT) FROM '<путь_до_клонированного репозитория>/foodgram-project-react/backend/foodgram/data/ingredients.csv' WITH (FORMAT csv);```)
 
 
-### Автор кода management-команды для загрузки данных из .csv файла в БД
+### Авторство
 
-_Василий Кузьминых_ (я только изменила команду под текущие нужды)
+Код management-команды для загрузки данных из .csv файла в БД написал мой бывший соратник по команде Василий Кузьминых (я только изменила команду под текущие нужды).
 
-### Автор всего остального
-
-_Татьяна Овчинникова_
+Всё остальное написала я, Татьяна Овчинникова.
 
 _февраль-март 2022 г_
