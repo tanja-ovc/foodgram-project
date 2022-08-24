@@ -20,7 +20,7 @@ _Примечание:_ на данный момент удалённый сер
 
 ### Технологии
 
-Python3.7, Django REST Framework, Docker, nginx, Gunicorn
+Python3.7, Django REST Framework, Docker, nginx, Gunicorn, GitHub Actions
 
 ### Инфраструктура
 
