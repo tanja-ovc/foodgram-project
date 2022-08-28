@@ -32,15 +32,68 @@ Python3.7, Django REST Framework, Docker, nginx, Gunicorn, GitHub Actions
 
 - деплой на удалённом сервере: https://github.com/tanja-ovc/docker_remote_containers#docker-yamdb-remote
 
+### Установка
+
+Клонировать репозиторий и перейти в него в командной строке:
+
+```https://github.com/tanja-ovc/docker_local_containers.git```
+
+Убедиться, что находитесь в директории _docker_local_containers/_, либо перейти в неё:
+
+```cd docker_local_containers/```
+
+Cоздать виртуальное окружение:
+
+```python3 -m venv venv```
+
+Активировать виртуальное окружение:
+
+* Для Mac:
+ 
+    ```source venv/bin/activate```
+
+* Для Windows:
+
+    ```source venv/Scripts/activate```
+
+При необходимости обновить pip:
+
+```pip install --upgrade pip```
+
+### Запуск проекта локально
+
+Для запуска контейнеров необходим установленный Docker.
+
+Перейдите в директорию _infra/_, где находится файл docker-compose. Соберите контейнеры:
+
+```docker-compose up```
+
+Выполните по очереди команды (выполнить миграции, создать суперпользователя и собрать статику):
+
+```docker-compose exec backend python manage.py migrate```
+
+```docker-compose exec backend python manage.py createsuperuser```
+
+```docker-compose exec backend python manage.py collectstatic --no-input```
+
+Теперь проект доступен локально.
+________________________________
+
+Примеры адресов, по которым можно обратиться, чтобы проверить корректную работу проекта:
+
+http://localhost/signup - страница регистрации,
+
+http://localhost/recipes - главная страница,
+
+http://localhost/admin/ - админка,
+
+http://localhost/api/docs/redoc.html - документация API Foodgram.
+
 ### Заполнение БД ингредиентами
 
 Заполнение таблицы ингредиентов в БД прилагающимися данными в формате .csv можно произвести с помощью команды
 
 ```sudo docker-compose exec backend python manage.py import_data```
-
-(При разработке локально можно обойтись средствами pqsl, выполнив команду
-```COPY recipes_ingredient(NAME,MEASUREMENT_UNIT) FROM '<путь_до_клонированного репозитория>/foodgram-project-react/backend/foodgram/data/ingredients.csv' WITH (FORMAT csv);```)
-
 
 ### Авторство
 
@@ -48,4 +101,4 @@ Python3.7, Django REST Framework, Docker, nginx, Gunicorn, GitHub Actions
 
 Всё остальное написала я, Татьяна Овчинникова.
 
-_февраль-март 2022 г_
+_Время написания: февраль-март 2022 г_
