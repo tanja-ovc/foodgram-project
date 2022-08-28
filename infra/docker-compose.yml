@@ -1,5 +1,4 @@
 # This is the docker-compose file suitable for LOCAL development.
-# The docker-compose on the remote server 51.250.12.20 is a little different.
 
 version: '3.3'
 
@@ -14,7 +13,7 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data/
     env_file:
-      - ./.env
+      - ../backend/foodgram/.env
 
   backend:
     image: tanjadocker/foodgram:latest
@@ -25,7 +24,7 @@ services:
     depends_on:
       - db
     env_file:
-      - ./.env
+      - ../backend/foodgram/.env
 
   frontend:
     image: tanjadocker/frontend_foodgram:latest
